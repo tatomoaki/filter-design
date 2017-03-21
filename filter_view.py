@@ -33,6 +33,7 @@ def filter_design():
 			BW = Filter_design('Butterworth')
 			Cbutter, Lbutter = BW.CapInductButter(order)
 			parts = BW.lowpass_filter(Cbutter, Lbutter, cut_off)
+			
 		elif (filter_name == 'Chebyshev'):
 			CH = Filter_design('Chebyshev')
 			Ccheb, Lcheb = BW.CapInductCheb(order)
@@ -43,7 +44,7 @@ def filter_design():
 		pass
 		
 		
-	return render_template("filteroutput.html", filter_name = filter_name)	
+	return render_template("filteroutput.html", filter_name = filter_name, parts = parts)	
 
 
 if __name__ == "__main__":

@@ -1,5 +1,18 @@
 <!doctype html>
 <html>
-	
-<h2> hi there {{filter_name}}</h2>
+<body>	
+<h2> {{filter_name}}</h2>
+
+<table border = 1>
+		{% for key, value in parts.iteritems()%}
+			<tr>
+               <th> {{ key }} </th>
+               <td> {{ value }} </td>
+            </tr>		
+		{% endfor %}
+</table>
+
+
+
+</body>
 </html>
