@@ -10,10 +10,9 @@ class responsecurve(object):
 	Responsecurve class simulates the behaviour of a filter constructed from filter_design script
 	ref : http://ecee.colorado.edu/~mathys/ecen2420/pdf/UsingFilterTables.pdf
 	"""
-	def __init__(self, E12Components, fname):
+	def __init__(self, E12Components):
 		"""Class constructor, initialises components dictionary"""
-		self.E12Components = E12Components	
-		self.fname = fname	
+		self.E12Components = E12Components		
 		self.plot_schematic()
 	
 	def plot_schematic(self):
@@ -48,7 +47,7 @@ class responsecurve(object):
 		
 		plt.subplot(211)
 		plt.ylabel("Gain [dB]")		
-		plt.title(self.fname+" - AC simulation")	
+		plt.title(" - AC simulation")	
 		plt.semilogx(r['ac']['f'], 20*np.log10(np.abs(r['ac']['Vn%d'%(it)])/np.abs(r['ac']['Vn%d'%(it)]).max()))		
 		plt.subplot(212)
 		plt.grid(True)
