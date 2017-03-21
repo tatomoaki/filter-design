@@ -2,7 +2,6 @@ import argparse
 import math
 import numpy as np
 
-
 """Values below have been obtained from: http://www.crbond.com/papers/bsf2.pdf Frequency normalized table
 Alternating capacitor and inductor values for normalized filter at cut-off freq 1 rad/sec impedance 1 ohm
 """
@@ -109,7 +108,7 @@ class Filter_design(object):
 			cap = "C%d"%i
 			items_dict[cap] = self.lowpass_capacitance(c, impedance, cut_off)		
 
-		self.standardLC(items_dict)
+		return self.standardLC(items_dict)
 
 	def highpass_filter(self, order, cut_off, impedance):
 		"""Calculate highpass filter"""
@@ -122,21 +121,23 @@ class Filter_design(object):
 			cap = "C%d"%(i)
 			items_dict[cap] = highpass_capacitance(c, R, F)
 		standardLC(items_dict, fname)
-
-	def standardLC(self, components_dict):
-		import responsecurve
+		
+	
+	def standardLC(self, components_dict):	
 		"""Return standard Capacitor and Inductor E12 values"""
 		
 		E12Components = {}
 		for part in components_dict:
 			if part[0] == 'L':
-				E12Components[part] = get_approximate(components_dict[part])
+				E12Components[part] = self.get_approximate(components_dict[part])
 
 			elif part[0] == 'C':
-				E12Components[part] = get_approximate(components_dict[part])
-		responsecurve.responsecurve(E12Components) #pass dictionary to responsecurve constructor
-		print_values(E12Components)
+				E12Components[part] = self.get_approximate(components_dict[part])
+		#responsecurve.responsecurve(E12Components) #pass dictionary to responsecurve constructor
+		self.print_values(E12Components)
 
+		return E12Components
+		
 	def get_approximate(self, val):
 		"""Approximates closest component value to E12 standards"""
 

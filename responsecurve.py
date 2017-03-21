@@ -5,7 +5,7 @@ import pylab as plt
 import numpy as np	
 from matplotlib.widgets import Cursor
 	
-class responsecurve(object):
+class Responsecurve(object):
 	"""
 	Responsecurve class simulates the behaviour of a filter constructed from filter_design script
 	ref : http://ecee.colorado.edu/~mathys/ecen2420/pdf/UsingFilterTables.pdf
