@@ -1,6 +1,5 @@
 import ahkab
-from ahkab import printing, time_functions, circuit 
-from filter_design import standardLC
+from ahkab import printing, time_functions, circuit
 import pylab as plt
 import numpy as np	
 from matplotlib.widgets import Cursor
@@ -12,13 +11,13 @@ class Responsecurve(object):
 	"""
 	def __init__(self, E12Components):
 		"""Class constructor, initialises components dictionary"""
-		self.E12Components = E12Components		
+		self.E12Components = E12Components			
 		self.plot_schematic()
 	
 	def plot_schematic(self):
 		"""Build circuit netlist and graph AC analysis under a pulse input"""
 		it = 0
-		
+		it_ = 0
 		schematic = circuit.Circuit("Filter Response Curve")	
 		gnd = schematic.get_ground_node()
 	
@@ -27,19 +26,21 @@ class Responsecurve(object):
 				it += 1
 				schematic.add_capacitor(partID, n1="n%s"%(partID[1]), n2=gnd, value=self.E12Components[partID])
 			elif (partID[0] == 'L'):
+				it_ += 1
 				schematic.add_inductor(partID, n1="n%s"%(partID[1]), n2="n%s"%(int(partID[1])+1), value=self.E12Components[partID])
 				
 		voltage_step = time_functions.pulse(v1=0, v2=5, td=0, tr=1e-9, pw=2, tf=1e-9, per=2e-3)
 		
 		#input and output impedance need to be the same
 		schematic.add_resistor("Rs", n1="n0", n2="n1", value=50)
-		if (it%2 == 0):
+		print("*"*10)
+		print(it)
+		if (it == it_):
 			it = it + 1
+		
+		
 		schematic.add_resistor("Rl", n1="n%d"%(it), n2=gnd, value=50)
-		schematic.add_vsource("V1", n1="n0", n2=gnd, dc_value=5, ac_value=2, function=voltage_step)
-				
-		print (schematic)
-				
+		schematic.add_vsource("V1", n1="n0", n2=gnd, dc_value=5, ac_value=2, function=voltage_step)					
 		
 		ac_analysis = ahkab.new_ac(start=1e3, stop=200e6, points=100)	
 		r = ahkab.run(schematic, an_list=[ac_analysis])
@@ -54,7 +55,7 @@ class Responsecurve(object):
 		plt.semilogx(r['ac']['f'], np.angle(r['ac']['Vn%d'%(it)]))
 		plt.ylabel("Phase")	
 		plt.xlabel("Frequency [Hz]")
-		plt.show()
+		return fig
 
 
 

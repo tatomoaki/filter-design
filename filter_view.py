@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from filter_design import Filter_design
-#from responsecurve import Responsecurve
+from responsecurve import Responsecurve
+import urllib
 app = Flask(__name__)
 
 @app.route('/')
@@ -42,10 +43,24 @@ def filter_design():
 	elif (fitler_response == 'Highpass'):
 		#implement high pass filter
 		pass
-		
-		
-	return render_template("filteroutput.html", filter_name = filter_name, parts = parts)	
 
+	F = Responsecurve(parts)	
+	fig = F.plot_schematic()
+	image_out = get_image(fig)
+	
+	return render_template("filteroutput.html", filter_name = filter_name, parts = parts, img_data=urllib.quote(image_out.rstrip('\n')) )	
+	
 
+def get_image(fig):
+	
+	import StringIO
+	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas	
+	
+	canvas = FigureCanvas(fig)
+	png_output = StringIO.StringIO()
+	canvas.print_png(png_output)
+	return png_output.getvalue().encode("base64")
+	
+	
 if __name__ == "__main__":
 	app.run(debug=True)
