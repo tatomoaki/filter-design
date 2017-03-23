@@ -24,6 +24,7 @@ def filter_design():
 	
 	filter_response = request.form['FilterResponse']
 	parts = {}
+	
 	if (filter_response == 'Lowpass'):
 		if (filter_name == 'Bessel'):	
 			B = Filter_design('Bessel')	
@@ -43,8 +44,17 @@ def filter_design():
 	elif (fitler_response == 'Highpass'):
 		#implement high pass filter
 		pass
-
-	F = Responsecurve(parts)	
+	minf = int(request.form['minf'])
+	maxf = int(request.form['maxf'])
+	runits = request.form['runits']
+	if (runits == 'MHz'):
+		minf *= 1e6
+		maxf *= 1e6
+	elif (runits == 'Khz'):
+		minf *= 1e6
+		maxf *= 1e6
+		
+	F = Responsecurve(parts, filter_name, minf, maxf)	
 	fig = F.plot_schematic()
 	image_out = get_image(fig)
 	
@@ -52,6 +62,7 @@ def filter_design():
 	
 
 def get_image(fig):
+	""""""
 	
 	import StringIO
 	from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas	

@@ -9,10 +9,14 @@ class Responsecurve(object):
 	Responsecurve class simulates the behaviour of a filter constructed from filter_design script
 	ref : http://ecee.colorado.edu/~mathys/ecen2420/pdf/UsingFilterTables.pdf
 	"""
-	def __init__(self, E12Components):
+	def __init__(self, E12Components, fname, minf, maxf):
 		"""Class constructor, initialises components dictionary"""
-		self.E12Components = E12Components			
-		self.plot_schematic()
+		self.E12Components = E12Components
+		self.fname = fname	
+		self.minf = minf
+		self.maxf = maxf		
+		self.plot_schematic()	
+	
 	
 	def plot_schematic(self):
 		"""Build circuit netlist and graph AC analysis under a pulse input"""
@@ -33,22 +37,22 @@ class Responsecurve(object):
 		
 		#input and output impedance need to be the same
 		schematic.add_resistor("Rs", n1="n0", n2="n1", value=50)
-		print("*"*10)
-		print(it)
-		if (it == it_):
-			it = it + 1
 		
+		if (it == it_):
+			it = it + 1		
 		
 		schematic.add_resistor("Rl", n1="n%d"%(it), n2=gnd, value=50)
-		schematic.add_vsource("V1", n1="n0", n2=gnd, dc_value=5, ac_value=2, function=voltage_step)					
+		schematic.add_vsource("V1", n1="n0", n2=gnd, dc_value=5, ac_value=2, function=voltage_step)			
 		
-		ac_analysis = ahkab.new_ac(start=1e3, stop=200e6, points=100)	
+		print (schematic)		
+		
+		ac_analysis = ahkab.new_ac(start=self.minf, stop=self.maxf, points=100)	
 		r = ahkab.run(schematic, an_list=[ac_analysis])
 		fig = plt.figure()
 		
 		plt.subplot(211)
 		plt.ylabel("Gain [dB]")		
-		plt.title(" - AC simulation")	
+		plt.title(self.fname+" - AC simulation")	
 		plt.semilogx(r['ac']['f'], 20*np.log10(np.abs(r['ac']['Vn%d'%(it)])/np.abs(r['ac']['Vn%d'%(it)]).max()))		
 		plt.subplot(212)
 		plt.grid(True)

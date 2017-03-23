@@ -59,8 +59,8 @@ class Filter_design(object):
 		
 	def CapInductButter(self, order):
 		"""Return normalized butterworth filter coefficients"""
-		Cap = normalizedButterworthCoefficients.__getitem__(str(order))[0:][::2]
-		Inductor = normalizedButterworthCoefficients.__getitem__(str(order))[1:][::2]
+		Cap = self.normalizedButterworthCoefficients.__getitem__(str(order))[0:][::2]
+		Inductor = self.normalizedButterworthCoefficients.__getitem__(str(order))[1:][::2]
 		
 		return Cap, Inductor
 

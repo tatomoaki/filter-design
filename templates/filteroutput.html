@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <body>	
-<h2> {{filter_name}}</h2>
-
+<h1> {{filter_name}}</h1>
+<hr>
 <table border = 1>
 		{% for key, value in parts.iteritems()%}
 			<tr>
@@ -11,11 +11,9 @@
             </tr>		
 		{% endfor %}
 </table>
-
+<hr>
 <div>
 	<img src="data:image/png;base64,{{img_data}}"/>
-<div>
-
-
+<div>	
 </body>
 </html>
